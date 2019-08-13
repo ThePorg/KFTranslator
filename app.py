@@ -19,8 +19,8 @@ def index():
         return str(e)
 
 def create_printout(url):
-    deck = get_deck_from_url(url)
-    generate_file(deck)
+    deckobj = get_deck_from_url(url)
+    generate_file(deckobj)
 
 def get_deck_from_url(url):
     deck_id = url.split("/")[-1]
@@ -33,3 +33,17 @@ def generate_file(deck):
     houses = deck.get("data").get("_links").get("houses")
     card_index = deck.get("data").get("_links").get("cards")
     card_data = deck.get("_linked").get("cards")
+#    cards = get_card_list(card_index, card_data)
+
+def get_card_list(index, data):
+    deck = []
+    for id in index:
+        deck.append(get_card_name(data, id))
+    return deck
+
+def get_card_name(data, id):
+    for i in range (len(data)):
+        if data[i].get("id") == id:
+            card = data[i].get("card_number") + " " + data[i].get("card_title")
+            return card
+    return "error"
