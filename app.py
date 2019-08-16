@@ -1,6 +1,7 @@
 from flask import Flask, redirect, render_template, request, url_for, send_file
 import requests
 import json
+import subprocess
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
@@ -13,8 +14,9 @@ def index():
         return render_template("main_page.html")
 
     create_printout(request.form["contents"])
+    subprocess.check_call(['pdflatex', 'decklist.tex'])
     try:
-        return send_file('decklist.tex')
+        return send_file('decklist.pdf')
     except Exception as e:
         return str(e)
 
