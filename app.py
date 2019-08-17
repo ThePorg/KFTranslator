@@ -27,7 +27,7 @@ def create_printout(url):
 def get_deck_from_url(url):
     deck_id = url.split("/")[-1]
     deck_url = 'https://www.keyforgegame.com/api/decks/' + deck_id.strip() + '/?links=cards'
-    deck_page = requests.get(deck_url)
+    deck_page = requests.get(deck_url, headers = {'Accept-Language': 'fr', 'links': 'cards'})
     return json.loads(deck_page.text)
 
 def generate_file(deck):
