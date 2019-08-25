@@ -16,7 +16,7 @@ def index():
     create_printout(request.form["contents"])
     subprocess.check_call(['pdflatex', 'decklist.tex'])
     try:
-        return send_file('decklist.pdf')
+        return send_file('../../decklist.pdf')
     except Exception as e:
         return str(e)
 
@@ -77,7 +77,7 @@ def make_tex(name, houselists, cardlists):
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
            "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + "\\end{multicols*}"\
            "\\end{document}"
-           
+
     texfile = open("decklist.tex", "w")
     texfile.write(file)
     texfile.close()
