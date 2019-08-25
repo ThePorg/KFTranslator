@@ -51,7 +51,7 @@ def generate_file(decks):
         houselists.append(houses)
     make_tex(name, houselists, cardlists)
 
-#Return a string with a card list using the index provided by the .json so cards are in the correct order
+#Return a list of strings with a card list using the index provided by the .json so cards are in the correct order
 def get_card_list(index, data):
     deck = []
     for id in index:
@@ -69,7 +69,7 @@ def get_card_name(data, id):
 #Build a .tex file and write it
 def make_tex(name, houselists, cardlists):
     content = write_content(houselists, cardlists)
-    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
+    file = "\\documentclass[11pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
            "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=1in]{geometry} \n"\
            "\\usepackage{url} \n" + "\\usepackage[colorlinks=false, pdftitle={Decklist},"\
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
@@ -87,10 +87,10 @@ def write_content(houselists, cardlists):
     content = ""
     for i in range (len(houselists)):
             content = content + "\\sectiontitle{" + houselists[i][0] + "} \n"\
-                      " " + "".join(cardlists[i][0:12]) + "\n"\
+                      " " + "".join(cardlists[i][0:12]).rstrip('\\') + "\n"\
                       " " + "\\sectiontitle{" + houselists[i][1] + "} \n"\
-                      " " + "".join(cardlists[i][12:24]) + "\n"\
+                      " " + "".join(cardlists[i][12:24]).rstrip('\\') + "\n"\
                       " " + "\\sectiontitle{" + houselists[i][2] + "} \n"\
-                      " " + "".join(cardlists[i][24:36]) + "\n"
+                      " " + "".join(cardlists[i][24:36]).rstrip('\\') + "\n"
     return content
 
