@@ -20,52 +20,77 @@ def index():
     except Exception as e:
         return str(e)
 
+#Retrieve all deck objects and generate the .tex file
 def create_printout(url):
-    deckobj = get_deck_from_url(url)
-    generate_file(deckobj)
+    langs = ['en', 'de', 'es', 'fr', 'it', 'pl', 'pt']
+    decks = []
+    for lang in langs:
+        deck = get_deck_from_url(url, lang)
+        decks.append(deck)
+    generate_file(decks)
 
-def get_deck_from_url(url):
+#Return .json deck object from Asmodees website in the languages required
+def get_deck_from_url(url, lang):
     deck_id = url.split("/")[-1]
     deck_url = 'https://www.keyforgegame.com/api/decks/' + deck_id.strip() + '/?links=cards'
-    deck_page = requests.get(deck_url, headers = {'Accept-Language': 'fr', 'links': 'cards'})
+    deck_page = requests.get(deck_url, headers = {'Accept-Language': lang, 'links': 'cards'})
     return json.loads(deck_page.text)
 
-def generate_file(deck):
-    name = deck.get("data").get("name")
-    houses = deck.get("data").get("_links").get("houses")
-    card_index = deck.get("data").get("_links").get("cards")
-    card_data = deck.get("_linked").get("cards")
-    cards = get_card_list(card_index, card_data)
-    make_tex(name, houses, cards)
+#Prepare the deck data to be turned into a .tex file
+def generate_file(decks):
+    cardlists = []
+    for deck in decks:
+        card_index = deck.get("data").get("_links").get("cards")
+        card_data = deck.get("_linked").get("cards")
+        cards = get_card_list(card_index, card_data)
+        cardlists.append(cards)
+    name = decks[0].get("data").get("name")
+    houselists = []
+    for deck in decks:
+        houses = deck.get("data").get("_links").get("houses")
+        houselists.append(houses)
+    make_tex(name, houselists, cardlists)
 
+#Return a string with a card list using the index provided by the .json so cards are in the correct order
 def get_card_list(index, data):
     deck = []
     for id in index:
         deck.append(get_card_name(data, id))
     return deck
 
+#Return a cards text and number and a LaTeX linebreak
 def get_card_name(data, id):
     for i in range (len(data)):
         if data[i].get("id") == id:
             card = data[i].get("card_number") + " " + data[i].get("card_title") + "\\\\"
-            return card.replace("}", "")
+            return card
     return "error"
 
-def make_tex(name, houses, cards):
-    file = "\\documentclass[11pt]{scrartcl} \n" + "\\usepackage[utf8]{inputenc} \n"\
-           "\\usepackage[T1]{fontenc} \n" + "\\usepackage[margin=0pt, landscape]{geometry} \n"\
-           "\\usepackage{graphicx} \n" + "\\usepackage{color} \n" + "\\definecolor{mygray}{gray}{.75} \n"\
+#Build a .tex file and write it
+def make_tex(name, houselists, cardlists):
+    content = write_content(houselists, cardlists)
+    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
+           "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=1in]{geometry} \n"\
            "\\usepackage{url} \n" + "\\usepackage[colorlinks=false, pdftitle={Decklist},"\
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
            "pdfkeywords={KeyForge, Decklist}]{hyperref} \n" + "\\setlength{\\unitlength}{1mm} \n"\
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
-           "\\begin{document}\n" + "\\begin{picture}(297,210)\n" + "\\put(10,200){\n"\
-           "\\begin{minipage}[t]{210mm}\n" + "\\section*{" + name + "}\n" + "\\end{minipage}\n" + "} \n"\
-           "\\put(10,180){\n" + "\\begin{minipage}[t]{85mm} \n" + "\\sectiontitle{" + houses[0] + "}"\
-           " " + "".join(cards[0:12]) + "\\sectiontitle{" + houses[1] + "} \n" + "".join(cards[12:24]) + "\\end{minipage} \n }"\
-           "\\put(105,180){\n" + "\\begin{minipage}[t]{85mm}" + "\\sectiontitle{" + houses[2] + "}"\
-           " " + "".join(cards[24:36]) + "\\end{minipage} \n" + "} \n" + "\\put(200,180){ \n" + "\\begin{minipage}[t]{85mm}"\
-           " \n \\end{minipage} \n } \n" + "\\end{picture} \n" + "\\end{document}"
+           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + "\\end{multicols*}"\
+           "\\end{document}"
+           
     texfile = open("decklist.tex", "w")
     texfile.write(file)
     texfile.close()
+
+#Create conjoined content string
+def write_content(houselists, cardlists):
+    content = ""
+    for i in range (len(houselists)):
+            content = content + "\\sectiontitle{" + houselists[i][0] + "} \n"\
+                      " " + "".join(cardlists[i][0:12]) + "\n"\
+                      " " + "\\sectiontitle{" + houselists[i][1] + "} \n"\
+                      " " + "".join(cardlists[i][12:24]) + "\n"\
+                      " " + "\\sectiontitle{" + houselists[i][2] + "} \n"\
+                      " " + "".join(cardlists[i][24:36]) + "\n"
+    return content
+
