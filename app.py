@@ -20,7 +20,7 @@ def index():
     except Exception as e:
         return str(e)
 
-#Retrieve all deck objects and generate the .tex file
+#Retrieve all deck objects and generate the .tex file 
 def create_printout(url):
     langs = ['en', 'de', 'es', 'fr', 'it', 'pl', 'pt']
     decks = []
@@ -69,13 +69,13 @@ def get_card_name(data, id):
 #Build a .tex file and write it
 def make_tex(name, houselists, cardlists):
     content = write_content(houselists, cardlists)
-    file = "\\documentclass[11pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
+    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
            "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=1in]{geometry} \n"\
            "\\usepackage{url} \n" + "\\usepackage[colorlinks=false, pdftitle={Decklist},"\
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
            "pdfkeywords={KeyForge, Decklist}]{hyperref} \n" + "\\setlength{\\unitlength}{1mm} \n"\
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
-           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + "\\rule{.2\\textwidth}{1pt}"\
+           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + " "\
            "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + "\\end{multicols*} " + "\\end{document}"
 
     texfile = open("decklist.tex", "w")
@@ -87,10 +87,11 @@ def write_content(houselists, cardlists):
     content = ""
     for i in range (len(houselists)):
             content = content + "\\sectiontitle{" + houselists[i][0] + "} \n"\
-                      " " + "".join(cardlists[i][0:12]).rstrip('\\') + "\n"\
+                      " " + "".join(cardlists[i][0:12]) + "\n"\
                       " " + "\\sectiontitle{" + houselists[i][1] + "} \n"\
-                      " " + "".join(cardlists[i][12:24]).rstrip('\\') + "\n"\
+                      " " + "".join(cardlists[i][12:24]) + "\n"\
                       " " + "\\sectiontitle{" + houselists[i][2] + "} \n"\
-                      " " + "".join(cardlists[i][24:36]).rstrip('\\') + "\n"
+                      " " + "".join(cardlists[i][24:36]) + "\n"\
+                      "\\rule{.18\\textwidth}{1pt}"
     return content
 
