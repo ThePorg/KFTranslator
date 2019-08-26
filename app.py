@@ -75,8 +75,8 @@ def make_tex(name, houselists, cardlists):
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
            "pdfkeywords={KeyForge, Decklist}]{hyperref} \n" + "\\setlength{\\unitlength}{1mm} \n"\
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
-           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + "\\end{multicols*}"\
-           "\\end{document}"
+           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + "\\rule{.2\\textwidth}{1pt}"\
+           "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + "\\end{multicols*} " + "\\end{document}"
 
     texfile = open("decklist.tex", "w")
     texfile.write(file)
