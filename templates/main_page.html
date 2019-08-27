@@ -3,10 +3,19 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <meta name="description" content="Create international decklists for FFGs game KeyForge so you can show your deklist to anyone, regardless of which language they prefer."/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+        <style>
+        footer{
+            margin-top: 15px;
+        }
+        textarea{
+            resize: none;
+            margin-bottom: 1px;
+        }
 
-        <title>KFTranslator</title>
+        </style>
+        <title>KFTranslator - A Translator to Create International KeyForge Decklists</title>
     </head>
 
     <body>
@@ -30,19 +39,23 @@
 
         <div class="row">
             <form action="." method="POST">
-                <textarea name="contents" placeholder="Enter your decks link here"></textarea>
-                <input type="submit" class="btn btn-success" value="Generate Printout">
+                <div><textarea name="contents" placeholder="Enter your decks link here"></textarea></div>
+                <div><input type="submit" class="btn btn-success" value="Generate Printout"></div>
+                
             </form>
         </div>
     </div><!-- / .container -->
-    <div class="container">
+    <footer>
+        <hr>
+        <div class="container">
+                Code: <a href="https://github.com/admiraldeathrain/KFTranslator">github.com/admiraldeathrain/KFTranslator</a> <br>
+                Webhosting isn't free (<a href="https://help.pythonanywhere.com/pages/403ForbiddenError">if you want to access an external API</a>), so tips are greatly appreciated at: <a href="https://paypal.me/KFTranslator">paypal.me/KFTranslator</a> <br>
+        </div>
+        
 
-        Code: <a href="https://github.com/admiraldeathrain/KFTranslator">github.com/admiraldeathrain/KFTranslator</a> <br>
-        Webhosting isn't free (<a href="https://help.pythonanywhere.com/pages/403ForbiddenError">if you want to access an external API</a>), so tips are greatly appreciated at: <a href="https://paypal.me/KFTranslator">paypal.me/KFTranslator</a> <br>
 
 
-
-    </div>
+    </footer>
     </body>
 </html>
 
