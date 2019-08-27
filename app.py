@@ -31,7 +31,7 @@ def create_printout(url):
 
 #Return .json deck object from Asmodees website in the languages required
 def get_deck_from_url(url, lang):
-    deck_id = url.split("/")[-1]
+    deck_id = url.split("/")[-1].partition('?')[0]
     deck_url = 'https://www.keyforgegame.com/api/decks/' + deck_id.strip() + '/?links=cards'
     deck_page = requests.get(deck_url, headers = {'Accept-Language': lang, 'links': 'cards'})
     return json.loads(deck_page.text)
