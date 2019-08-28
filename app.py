@@ -22,7 +22,7 @@ def index():
 
 #Retrieve all deck objects and generate the .tex file 
 def create_printout(url):
-    langs = ['en', 'de', 'es', 'fr', 'it', 'pl', 'pt']
+    langs = ['en', 'de', 'es', 'fr', 'it', 'pl', 'pt', 'zh']
     decks = []
     for lang in langs:
         deck = get_deck_from_url(url, lang)
@@ -69,14 +69,14 @@ def get_card_name(data, id):
 #Build a .tex file and write it
 def make_tex(name, houselists, cardlists):
     content = write_content(houselists, cardlists)
-    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n"\
-           "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=1in]{geometry} \n"\
+    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n" + "\\usepackage{CJKutf8} \n"\
+           "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=.5in]{geometry} \n"\
            "\\usepackage{url} \n" + "\\usepackage[colorlinks=false, pdftitle={Decklist},"\
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
            "pdfkeywords={KeyForge, Decklist}]{hyperref} \n" + "\\setlength{\\unitlength}{1mm} \n"\
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
-           "\\begin{document}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + " "\
-           "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + "\\end{multicols*} " + "\\end{document}"
+           "\\begin{document}\n \\begin{CJK}{UTF8}{gbsn}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + " "\
+           "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + " \n \\end{multicols*} " + "\n \\end{CJK} \n \\end{document}"
 
     texfile = open("decklist.tex", "w")
     texfile.write(file)
