@@ -14,7 +14,7 @@ def index():
         return render_template("main_page.html")
 
     create_printout(request.form["contents"])
-    subprocess.check_call(['pdflatex', 'decklist.tex'])
+    subprocess.check_call(['xelatex', 'decklist.tex'])
     try:
         return send_file('../../decklist.pdf')
     except Exception as e:
@@ -69,15 +69,15 @@ def get_card_name(data, id):
 #Build a .tex file and write it
 def make_tex(name, houselists, cardlists):
     content = write_content(houselists, cardlists)
-    file = "\\documentclass[10pt]{report} \n" + "\\usepackage[utf8]{inputenc} \n" + "\\usepackage{multicol} \n" + "\\usepackage{CJKutf8} \n"\
+    file = "\\documentclass[10pt]{report} \n" + "\\usepackage{multicol} \n" + "\\usepackage{xeCJK} \n"\
            "\\usepackage[T1]{fontenc} \n" + "\\usepackage[a4paper, landscape, margin=.5in]{geometry} \n"\
            "\\usepackage{url} \n" + "\\usepackage[colorlinks=false, pdftitle={Decklist},"\
            "pdfauthor={Admiral Deathrain},pdfsubject={International KeyForge Decklist},"\
            "pdfkeywords={KeyForge, Decklist}]{hyperref} \n" + "\\setlength{\\unitlength}{1mm} \n"\
            "\\setlength{\\parindent}{0pt} \n" + "\\newcommand{\\sectiontitle}[1]{\\paragraph{#1}\\ \\\\} \n"\
-           "\\begin{document}\n \\begin{CJK}{UTF8}{bsmi}\n" + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + " "\
-           "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + " \n \\end{multicols*} " + "\n \\end{CJK} \n \\end{document}"
-
+           "\\begin{document}\n " + "\\section*{" + name + "}\n" + "\\begin{multicols*}{5}"  + content + " "\
+           "\\\\ \n Created with KFTranslator:" + "\\\\ \n deathrain.pythonanywhere.com " + " \n \\end{multicols*} " + "\n \\end{document}"
+    file = file.replace('¶', '\\P ')
     texfile = open("decklist.tex", "w")
     texfile.write(file)
     texfile.close()
